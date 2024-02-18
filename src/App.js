@@ -5,6 +5,7 @@ import SingleMovie from "./pages/SingleMovie";
 import Movies from "./pages/Movies";
 import Navbar from "./components/Navbar";
 import Cast from "./pages/Cast";
+import Favorite from "./pages/Favorite";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/movie" element={<Movies />} />
         <Route path="/movie/:id" element={<SingleMovie />} />
         <Route path="/movie/:id/cast" element={<Cast />} />
+        <Route path="/favorite" element={<Favorite />} />
       </Routes>
       <Footer />
     </Router>

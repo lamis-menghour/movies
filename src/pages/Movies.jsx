@@ -1,12 +1,15 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import MoviesList from "../components/MoviesList";
 import SideBar from "../components/SideBar";
 import LoadMore from "../components/LoadMore";
 import SearchMovie from "../components/SearchMovie";
 import { Flex } from "@mantine/core";
+import { NavbarContext } from "../contexts/NavbarContext";
 
-export default function Movies({}) {
+export default function Movies() {
+  const { url } = useContext(NavbarContext);
+
   const [status, setStatus] = useState({
     isLoading: true,
     isError: false,
@@ -60,12 +63,10 @@ export default function Movies({}) {
   const [selectedLanguage, setSelectedLanguage] = useState("en");
 
   // const apiKey = "e6e448cef5dc98e7a3fe031d4294e502";
-  const url = "https://api.themoviedb.org/3/movie/popular";
 
   const URL = `${url}?page=${page}&language=${selectedLanguage}&sort_by=${selectedSorting}${
-    selectedGenres.length > 0 ? `&genre=${selectedGenres.join(",")}` : ""
+    selectedGenres?.length > 0 ? `&genre=${selectedGenres.join(",")}` : ""
   }`;
-  console.log(URL);
 
   const options = {
     method: "GET",
@@ -78,39 +79,27 @@ export default function Movies({}) {
 
   const fetchGenre = async () => {
     const url = `https://api.themoviedb.org/3/genre/movie/list?language=${selectedLanguage}`;
-    setStatus((status) => ({ ...status, isLoading: true }));
     try {
       const { data } = await axios.get(url, options);
       if (data.Error) {
-        setStatus((status) => ({ ...status, isError: true }));
         return;
       }
-      setStatus((status) => ({ ...status, isSuccess: true }));
       setGenresData(data);
     } catch (error) {
-      setStatus((status) => ({ ...status, isError: true }));
       console.log(error.message);
-    } finally {
-      setStatus((status) => ({ ...status, isLoading: false }));
     }
   };
 
   const fetchLanguages = async () => {
     const url = `https://api.themoviedb.org/3/configuration/languages`;
-    setStatus((status) => ({ ...status, isLoading: true }));
     try {
       const { data } = await axios.get(url, options);
       if (data.Error) {
-        setStatus((status) => ({ ...status, isError: true }));
         return;
       }
-      setStatus((status) => ({ ...status, isSuccess: true }));
       setLanguages(data);
     } catch (error) {
-      setStatus((status) => ({ ...status, isError: true }));
       console.log(error.message);
-    } finally {
-      setStatus((status) => ({ ...status, isLoading: false }));
     }
   };
 
@@ -143,25 +132,25 @@ export default function Movies({}) {
   };
 
   const prevUrlRef = useRef(url);
-  // const prevPageRef = useRef(page);
+  const prevPageRef = useRef(page);
   useEffect(() => {
     // Check if the URL has changed
     if (url !== prevUrlRef.current) {
-      setPage(1);
       setMoviesData([]);
+      setPage(1);
       fetchMovies();
     }
     // Check if the page has changed
-    // else if (page !== prevPageRef.current) {
-    //   fetchMovies();
-    // }
-    else {
+    else if (page !== prevPageRef.current) {
+      fetchMovies();
+    } else {
       fetchMovies();
     }
     prevUrlRef.current = url;
-    // prevPageRef.current = page;
-  }, [page, selectedGenres, selectedLanguage, selectedSorting]);
+    prevPageRef.current = page;
+  }, [url, page, selectedGenres, selectedLanguage, selectedSorting]);
 
+  // console.log(URL);
   return (
     <>
       {status.isLoading && <div> Loading</div>}
@@ -182,7 +171,9 @@ export default function Movies({}) {
           <Flex
             direction="column"
             gap={40}
-            style={{ padding: "25px", marginLeft: "230px", marginTop: "80px" }}
+            ml={"230px"}
+            mt={"60px"}
+            style={{ padding: "25px" }}
           >
             <SearchMovie
               searchValue={searchValue}
@@ -190,20 +181,20 @@ export default function Movies({}) {
             />
 
             <MoviesList
-              moviesData={moviesData.filter((movie) => {
+              moviesData={moviesData?.filter((movie) => {
                 return movie.title
                   ?.toLowerCase()
-                  .includes(searchValue.toLowerCase());
+                  .includes(searchValue?.toLowerCase());
               })}
             />
 
             <LoadMore
               page={page}
               setPage={setPage}
-              data={moviesData.filter((movie) => {
+              data={moviesData?.filter((movie) => {
                 return movie.title
                   ?.toLowerCase()
-                  .includes(searchValue.toLowerCase());
+                  .includes(searchValue?.toLowerCase());
               })}
             />
           </Flex>

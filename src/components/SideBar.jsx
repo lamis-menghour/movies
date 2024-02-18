@@ -1,12 +1,6 @@
-import React, { useState } from "react";
-import {
-  Stack,
-  Button,
-  Title,
-  Select,
-  Grid,
-  Group,
-} from "@mantine/core";
+import React, { useState, useContext } from "react";
+import { Stack, Button, Title, Select, Grid, Group } from "@mantine/core";
+import { NavbarContext } from "../contexts/NavbarContext";
 
 export default function SideBar({
   sortingOptions,
@@ -19,11 +13,11 @@ export default function SideBar({
   selectedLanguage,
   setSelectedLanguage,
 }) {
+  const { linkTitle } = useContext(NavbarContext);
   const [hovered, setHovered] = useState(null);
   const capitalize = (name) => {
     return name.charAt(0).toUpperCase() + name.slice(1);
   };
-  console.log(selectedGenres);
   return (
     <Stack
       direction="column"
@@ -33,17 +27,24 @@ export default function SideBar({
       w={"220px"}
       style={{
         position: "absolute",
-        top: 70,
+        top: 65,
         left: 10,
         paddingBottom: "20px",
       }}
     >
-      <Title order={2}>Popular Movies</Title>
+      <Title
+        order={2}
+        mt={"10px"}
+        mb={"10px"}
+        style={{ textTransform: "capitalize" }}
+      >
+        {linkTitle} Movies
+      </Title>
       <Group
         p={"10px"}
         style={{
           boxShadow: "0 0 15px rgba(0 ,0, 0,0.2)",
-          borderRadius:"5px"
+          borderRadius: "5px",
         }}
       >
         <Title order={3} fw={500}>
@@ -67,7 +68,7 @@ export default function SideBar({
             Genres :
           </Title>
           <Grid>
-            {genresData?.genres.map((genre) => (
+            {genresData?.genres?.map((genre) => (
               <Button
                 w="max-content"
                 variant={

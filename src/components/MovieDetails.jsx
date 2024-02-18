@@ -7,9 +7,14 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import React from "react";
+import React, { useContext } from "react";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { FavoriteContext } from "../contexts/FavoriteContext";
 
 function MovieDetails({ movie }) {
+  const { favorite, addToFavorite, removeFromFavorite } =
+    useContext(FavoriteContext);
+
   const posterUrl =
     `https://image.tmdb.org/t/p/original${movie?.backdrop_path}` ||
     `https://image.tmdb.org/t/p/original${movie?.poster_path}`;
@@ -109,19 +114,46 @@ function MovieDetails({ movie }) {
             />
           </Flex>
         </Container>
-        <Container w="100%">
-          <RingProgress
-            size={70}
-            thickness={7}
-            roundCaps
-            label={
-              <Text fw={700} ta="center" size="md">
-                {Math.trunc(rating)}%
-              </Text>
-            }
-            sections={[{ value: rating, color: colors() }]}
-          />
-        </Container>
+        <Flex w="100%" p={"10px"} align={"center"} gap={"50px"}>
+          <Flex align={"center"}>
+            <RingProgress
+              size={70}
+              thickness={7}
+              roundCaps
+              label={
+                <Text fw={700} ta="center" size="md">
+                  {Math.trunc(rating)}%
+                </Text>
+              }
+              sections={[{ value: rating, color: colors() }]}
+            />
+            <Text w="min-content" fw={500} fs={"14px"}>
+              User Score
+            </Text>
+          </Flex>
+          <Flex
+            bg={"rgba(3,37,65)"}
+            w={"50px"}
+            h="50px"
+            justify={"center"}
+            align={"center"}
+            style={{ borderRadius: "50%" }}
+          >
+            <FavoriteIcon
+              style={{
+                color: favorite?.some((item) => item.id === movie.id)
+                  ? "red"
+                  : "lightGray",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                favorite?.some((item) => item.id === movie.id)
+                  ? removeFromFavorite(movie)
+                  : addToFavorite(movie);
+              }}
+            />
+          </Flex>
+        </Flex>
         <Container w="100%">
           <Text fs="italic" c="rgba(255,255,255,0.75)">
             {movie?.tagline}

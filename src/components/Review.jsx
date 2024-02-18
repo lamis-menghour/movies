@@ -19,7 +19,7 @@ function Review({ review }) {
         <Image
           h={50}
           w={50}
-          radius={"50%"}
+          radius={"xl"}
           src={`https://image.tmdb.org/t/p/original${review.author_details.avatar_path}`}
           alt={review.author}
         />
@@ -28,11 +28,11 @@ function Review({ review }) {
           h={50}
           w={50}
           bg={"#dbdbdb"}
-          radius={"50%"}
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            borderRadius: "50%",
           }}
         >
           <PersonIcon

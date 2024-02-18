@@ -1,8 +1,10 @@
-import React from "react";
-import { Flex, Group, Image } from "@mantine/core";
+import React, { useContext } from "react";
+import { Flex, Group, Image, Menu, Text } from "@mantine/core";
 import { Link } from "react-router-dom";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import { NavbarContext } from "../contexts/NavbarContext";
 function Navbar() {
+  const { setUrl, navBarLinks, setLinkTitle } = useContext(NavbarContext);
   return (
     <Flex
       style={{
@@ -21,16 +23,46 @@ function Navbar() {
       justify="space-between"
       align="center"
       direction="row"
-      wrap="nowrap"
+      wrap="wrap"
     >
-      <Image src="/img/TMDb.svg" h={60} w={150} fit="contain" />
+      <Link to={"/"}>
+        <Image src="/img/TMDb.svg" h={60} w={150} fit="contain" />
+      </Link>
 
       <Group justify="space-between">
-        <Link to={"/"}>Home</Link>
-        <Link to={"/movie"}>Movie</Link>
-        <Link to={"/tv"}>TV Shows</Link>
-        <Link to={"/person"}>People</Link>
+        <Link to={"/"} style={{ fontWeight: 500 }}>
+          Home
+        </Link>
+
+        {navBarLinks?.map((group) => (
+          <Menu trigger="hover" openDelay={100} closeDelay={200}>
+            <Menu.Target>
+              <Text c="white" fw={500} style={{ cursor: "pointer" }}>
+                {group.title}
+              </Text>
+            </Menu.Target>
+            <Menu.Dropdown>
+              {group.dropDown.map((item, index) => (
+                <Link to={group.link}>
+                  <Menu.Item
+                    key={index}
+                    onClick={() => {
+                      setLinkTitle(item.label);
+                      setUrl(item.url);
+                    }}
+                  >
+                    {item.label}
+                  </Menu.Item>
+                </Link>
+              ))}
+            </Menu.Dropdown>
+          </Menu>
+        ))}
+        <Link to={"/favorite"} style={{ fontWeight: 500 }}>
+          Favorite
+        </Link>
       </Group>
+
       <Group justify="space-between" align="center" mr={20}>
         <span
           style={{
@@ -48,7 +80,7 @@ function Navbar() {
         <SearchOutlinedIcon
           style={{
             color: "white",
-            cursor:"pointer"
+            cursor: "pointer",
           }}
         />
       </Group>

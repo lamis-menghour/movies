@@ -1,7 +1,6 @@
 import React from "react";
 import { Flex, Group, Image, Menu, Text } from "@mantine/core";
 import { useState } from "react";
-import Movies from "../pages/Movies";
 
 const NavigationBar = () => {
   const moviesLinks = {
@@ -66,7 +65,6 @@ const NavigationBar = () => {
   const [url, setUrl] = useState("https://api.themoviedb.org/3/movie/popular");
 
   return (
-    <>
       <Flex
         gap="md"
         justify="flex-start"
@@ -102,8 +100,6 @@ const NavigationBar = () => {
           </Menu>
         </Group>
       </Flex>
-      <Movies url={url} />
-    </>
   );
 };
 

@@ -1,8 +1,13 @@
-import React, { useState } from "react";
-import { Card, Image, Text, RingProgress } from "@mantine/core";
+import React, { useContext } from "react";
+import { Card, Image, Text, RingProgress, Flex } from "@mantine/core";
 import { Link } from "react-router-dom";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { FavoriteContext } from "../contexts/FavoriteContext";
 
 export default function Movie({ movie }) {
+  const { favorite, addToFavorite, removeFromFavorite } =
+    useContext(FavoriteContext);
+
   const rating = movie.vote_average * 10;
   const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
 
@@ -47,20 +52,39 @@ export default function Movie({ movie }) {
         }
         sections={[{ value: rating, color: colors() }]}
       />
-      <Link to={`/movie/${movie.id}`} style={{ all: "unset" }}>
-        <Text
-          fw={500}
-          style={{
-            marginTop: "30px",
-            cursor: "pointer",
-          }}
-        >
-          {movie.title}
-        </Text>
-      </Link>
-      <Text size="sm" c="dimmed">
-        {movie.release_date}
-      </Text>
+      <Flex justify={"space-between"} align={"flex-end"}>
+        <Flex direction="column">
+          <Link to={`/movie/${movie.id}`} style={{ all: "unset" }}>
+            <Text
+              fw={500}
+              style={{
+                marginTop: "30px",
+                cursor: "pointer",
+              }}
+            >
+              {movie.title}
+            </Text>
+          </Link>
+          <Text size="sm" c="dimmed">
+            {movie.release_date}
+          </Text>
+        </Flex>
+        <Flex>
+          <FavoriteIcon
+            style={{
+              color: favorite?.some((item) => item.id === movie.id)
+              ? "red":
+               "lightGray",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              favorite?.some((item) => item.id === movie.id)
+                ? removeFromFavorite(movie)
+                : addToFavorite(movie);
+            }}
+          />
+        </Flex>
+      </Flex>
     </Card>
   );
 }

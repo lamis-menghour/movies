@@ -14,7 +14,7 @@ import CreditSlide from "./CreditSlide";
 
 function Credits({ id, credits }) {
   return (
-    <Container fluid mt={"10px"} w={"95vw"} >
+    <Container fluid mt={"30px"} w={"95vw"} >
       <Title order={2} fw={500}>
         Top Billed Cast
       </Title>

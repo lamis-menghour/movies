@@ -4,18 +4,18 @@ import { Link } from "react-router-dom";
 
 function RecommendationSlide({slide}) {
   return (
-    <Card shadow="sm" padding="md" radius="sm" mih={270} w={180} withBorder>
+    <Card shadow="sm" padding="md" radius="sm" mih={230} w={180} withBorder>
       <Card.Section>
         <Link to={`/movie/${slide.id}`}>
           {slide?.poster_path ? (
             <Image
               src={`https://image.tmdb.org/t/p/w500${slide.poster_path}`}
-              height={"210px"}
+              height={"150px"}
               alt={slide.title}
             />
           ) : (
             <Box
-              h={"200px"}
+              h={"150px"}
               w={"100%"}
               bg={"#dbdbdb"}
               style={{
@@ -32,7 +32,7 @@ function RecommendationSlide({slide}) {
         <Text fw={500} c={"black"} mt={"10px"}>
           {slide.title}
           {"  "}
-          <Text
+          <span
           fs={"14px"}
             style={{
               fontWeight: "400",
@@ -41,7 +41,7 @@ function RecommendationSlide({slide}) {
             }}
           >
             ({slide.release_date.split("-")[0]})
-          </Text>
+          </span>
         </Text>
       </Link>
       <Text size="sm" c="dimmed"></Text>

@@ -101,7 +101,6 @@ export default function SingleMovie({}) {
       setStatus((prev) => ({ ...prev, isLoading: false }));
     }
   };
-
   const fetchReviews = async () => {
     const url = `https://api.themoviedb.org/3/movie/${id}/reviews`;
     setStatus((prev) => ({ ...prev, isLoading: true }));
@@ -121,7 +120,7 @@ export default function SingleMovie({}) {
   };
 
   useEffect(() => {
-    fetchData();
+    id && fetchData();
     fetchMovieRecommendations();
     fetchMovieCredits();
     fetchTrailer();
@@ -137,9 +136,9 @@ export default function SingleMovie({}) {
       {!status.isLoading && status.isSuccess && (
         <>
           <MovieDetails movie={movie} />
-          <Recommendations slides={recommendations} />
           <Credits id={id} credits={credits} />
           <Trailer trailerKey={trailer?.key} />
+          <Recommendations slides={recommendations} />
           <Reviews reviews={reviews} />
         </>
       )}
